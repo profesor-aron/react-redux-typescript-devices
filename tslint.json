@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "tslint:latest"
+  ],
+  "defaultSeverity": "warning",
+  "rules": {
+    "semicolon": [true, "never"],
+    "quotemark": [true, "single"],
+    "trailing-comma": false,
+    "no-implicit-dependencies": [true, "dev"],
+    "no-empty": false
+  }
+}

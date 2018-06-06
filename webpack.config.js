@@ -14,14 +14,23 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: {
-          loader: "awesome-typescript-loader"
-        }
+        use: [
+          "awesome-typescript-loader",
+          "tslint-loader"
+        ]
       },
       {
-        test: /\.tsx?$/,
-        use: {
-          loader: "tslint-loader"
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader"
+        ]
+      },
+      {
+        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+        loader: "url-loader",
+        options: {
+          limit: 10000
         }
       }
     ]

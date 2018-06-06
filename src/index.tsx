@@ -2,14 +2,19 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-
-import { DevicesList } from './devices/list/DevicesList'
-
 import {
   HashRouter as Router,
   Link,
   Route
 } from 'react-router-dom'
+import {
+  Icon,
+  Menu,
+} from 'semantic-ui-react'
+
+import 'semantic-ui-css/semantic.min.css'
+
+import { DevicesList } from './devices/list/DevicesList'
 
 const routes = [
   {
@@ -30,20 +35,23 @@ const routes = [
 const App = () => (
   <Router>
     <div>
-      <div>
-        <ul>
-          <li>
-            <Link to='/'>Home</Link>
-          </li>
-          <li>
-            <Link to='/devices/list'>Devices list</Link>
-          </li>
-          <li>
-            <Link to='/devices/form'>Device form</Link>
-          </li>
-        </ul>
-      </div>
-
+      <Menu>
+        <Menu.Item
+          name='home'
+          href='#/'
+          active={true}
+        >
+          <Icon name='home' />
+          Home
+        </Menu.Item>
+        <Menu.Item
+          name='devices'
+          href='#/devices/list'
+        >
+          <Icon name='server' />
+          Devices
+        </Menu.Item>
+      </Menu>
       <div>
         {
           routes.map((route, index) => (

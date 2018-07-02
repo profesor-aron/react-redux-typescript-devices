@@ -9,6 +9,24 @@
     "trailing-comma": false,
     "no-implicit-dependencies": [true, "dev"],
     "no-empty": false,
-    "no-submodule-imports": [true, "semantic-ui-css"]
+    "no-submodule-imports": [true, "semantic-ui-css"],
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "public-static-field",
+          "public-instance-field",
+          "private-static-field",
+          "private-instance-field",
+          "public-constructor",
+          "private-constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
+        ]
+      }
+    ],
+    "ordered-imports": false,
+    "no-console": false
   }
 }

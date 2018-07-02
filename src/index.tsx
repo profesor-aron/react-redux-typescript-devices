@@ -2,84 +2,50 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import {
-  HashRouter as Router,
-  Link,
-  Route
-} from 'react-router-dom'
-import { createStore } from 'redux'
+  applyMiddleware,
+  combineReducers,
+  createStore
+} from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import thunk from 'redux-thunk'
+
+import './common/services/MockServerAPI'
+
+import { devicesReduce } from './modules/devices/list/DevicesList'
 import {
-  Icon,
-  Menu,
-} from 'semantic-ui-react'
+  MainViewContainer,
+  viewReduce
+} from './modules/main/Main'
+import { MenuViewContainer } from './common/components/menu/Menu'
+import { deviceFormReduce } from './modules/devices/form/DeviceForm'
+import { Router } from './router'
 
-import 'semantic-ui-css/semantic.min.css'
+export const rootReducer = combineReducers({
+  deviceForm: deviceFormReduce,
+  devices: devicesReduce,
+  view: viewReduce
+})
 
-import { DevicesList } from './devices/list/DevicesList'
-
-const routes = [
-  {
-    exact: true,
-    main: () => <h2>Home</h2>,
-    path: '/'
-  },
-  {
-    main: () => <DevicesList/>,
-    path: '/devices/list'
-  },
-  {
-    main: () => <h2>Shoelaces</h2>,
-    path: '/devices/form'
-  }
-]
-
-const App = () => (
-  <Router>
-    <div>
-      <Menu>
-        <Menu.Item
-          name='home'
-          href='#/'
-          active={true}
-        >
-          <Icon name='home' />
-          Home
-        </Menu.Item>
-        <Menu.Item
-          name='devices'
-          href='#/devices/list'
-        >
-          <Icon name='server' />
-          Devices
-        </Menu.Item>
-      </Menu>
-      <div>
-        {
-          routes.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              exact={route.exact}
-              component={route.main}
-            />
-          ))
-        }
-      </div>
-    </div>
-  </Router>
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
 )
 
-/*
-const store = createStore(counterReduce)
+Router.initialise(store.dispatch)
+Router.changeView('/home')
+
+const App = () => {
+  return (
+    <div>
+      <MenuViewContainer />
+      <MainViewContainer />
+    </div>
+  )
+}
 
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('app')
-)
-*/
-
-ReactDOM.render(
-  <App />,
   document.getElementById('app')
 )

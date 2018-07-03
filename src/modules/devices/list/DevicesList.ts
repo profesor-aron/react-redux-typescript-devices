@@ -84,12 +84,12 @@ export function devicesPostData(url: string, data: any) {
   }
 }
 
-export function showHideConfirmModal(value: boolean) {
-  return { type: ActionTypes.DEVICES_SHOW_HIDE_CONFIRM_MODAL, value }
+export function showHideConfirmModal(isOpen: boolean) {
+  return { type: ActionTypes.DEVICES_SHOW_HIDE_CONFIRM_MODAL, payload: isOpen }
 }
 
 export function selectDevice(device: IDevice) {
-  return { type: ActionTypes.DEVICES_ITEM_SELECTED, value: device }
+  return { type: ActionTypes.DEVICES_ITEM_SELECTED, payload: device }
 }
 
 export function deleteDevice(device: IDevice) {
@@ -100,19 +100,25 @@ export function deleteDevice(device: IDevice) {
 }
 
 export function addDevice(): IThunkResult<void> {
-  return (dispatch: ThunkDispatch<IState, void, AnyAction>, getState: () => IState) => {
+  return (dispatch: ThunkDispatch<IState, void, AnyAction>) => {
     dispatch(deviceFormIsSaved(false))
     dispatch(changeView('/devices/add'))
   }
 }
 
 export function editDevice(device: IDevice): IThunkResult<void> {
-  return (dispatch: ThunkDispatch<IState, void, AnyAction>, getState: () => IState) => {
-    dispatch(deviceFormIsSaved(false))
-    dispatch(deviceIdUpdate(device.id))
-    dispatch(deviceNameUpdate(device.name))
-    dispatch(deviceDescriptionUpdate(device.description))
-    dispatch(changeView('/devices/edit'))
+  return (dispatch: ThunkDispatch<IState, void, AnyAction>) => {
+    DeviceService.get(`/devices/${device.id}`)
+      .then((deviceFound) => {
+        dispatch(deviceFormIsSaved(false))
+        dispatch(deviceIdUpdate(deviceFound.id))
+        dispatch(deviceNameUpdate(deviceFound.name))
+        dispatch(deviceDescriptionUpdate(deviceFound.description))
+        dispatch(changeView('/devices/edit'))
+      })
+      .catch((error) => {
+        dispatch(devicesHasErrored(error, true))
+      })
   }
 }
 
@@ -129,8 +135,7 @@ export function devicesDeleteData(): IThunkResult<void> {
         dispatch(selectDevice(undefined))
       })
       .catch((error) => {
-        console.log(error)
-        //dispatch(devicesHasErrored(true))
+        dispatch(devicesHasErrored(error, true))
       })
   }
 }

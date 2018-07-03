@@ -27,6 +27,14 @@ class Database {
     return Database.DEVICES
   }
 
+  public static getDevice(id: number) {
+    console.log(id)
+    return new Promise((resolve, reject) => {
+      const index = Database.DEVICES.findIndex((item) => item.id === id)
+      resolve(Database.DEVICES[index])
+    })
+  }
+
   public static deleteDevice(id: number) {
     return new Promise((resolve, reject) => {
       const index = Database.DEVICES.findIndex((item) => item.id === id)
@@ -60,6 +68,19 @@ Database.initialise()
 
 mock.onGet('/devices').reply((config) => {
   return [200, Database.getDevices()]
+})
+
+mock.onGet(/\/devices\/\d+/).reply((config) => {
+  return new Promise((resolve, reject) => {
+    const url = config.url
+    const regex = /\d+/
+    const idDevice = Number(url.match(regex)[0])
+    Database.getDevice(idDevice).then((device) => {
+      resolve([200, device])
+    }, (error) => {
+      console.log(error) // Error: "It broke"
+    })
+  })
 })
 
 mock.onPost('/devices').reply((config) => {

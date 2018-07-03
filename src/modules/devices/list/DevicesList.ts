@@ -70,7 +70,7 @@ export function devicesItemsFetchData(url: string): IThunkResult<void> {
   }
 }
 
-export function devicesPostData(url: string, data: any) {
+export function devicesPostData(url: string, data: IDevice) {
   return (dispatch: Dispatch) => {
     dispatch(devicesIsLoading(true))
     DeviceService.post(url, data)

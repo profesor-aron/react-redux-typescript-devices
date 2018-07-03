@@ -100,7 +100,7 @@ export function deviceFormPutDataSuccess(idDevice: number | undefined) {
   return { type: ActionTypes.DEVICE_FORM_PUT_DATA_SUCCESS, payload: idDevice }
 }
 
-export function devicePostData(url: string, data: any) {
+export function devicePostData(url: string, data: IDevice) {
   return (dispatch: Dispatch) => {
     dispatch(deviceFormIsSaved(false))
     dispatch(deviceFormIsPending(true))
@@ -116,7 +116,7 @@ export function devicePostData(url: string, data: any) {
   }
 }
 
-export function devicePutData(url: string, data: any) {
+export function devicePutData(url: string, data: IDevice) {
   return (dispatch: Dispatch) => {
     dispatch(deviceFormIsSaved(false))
     dispatch(deviceFormIsPending(true))

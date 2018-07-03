@@ -89,6 +89,12 @@ export interface ILink {
 }
 
 /***************************************************/
+/* NoFound */
+export interface INoFoundContainer {
+  changeView: (route: string) => void
+}
+
+/***************************************************/
 /* Device */
 export interface IDeviceContainer {
   apply: () => void
@@ -99,55 +105,40 @@ export interface IDeviceContainer {
   updateDescription: (e: SyntheticEvent<HTMLInputElement>) => void
 }
 
-/***************************************************/
-/* NoFound */
-export interface INoFoundContainer {
-  changeView: (route: string) => void
+export interface IDeviceFormHasErroredAction extends IActionBase {
+  payload: boolean
 }
 
-export interface IDeviceFormHasErroredAction {
-  type: string
-  value: boolean
+export interface IDeviceFormIsPendingAction extends IActionBase {
+  payload: boolean
 }
 
-export interface IDeviceFormIsPendingAction {
-  type: string
-  value: boolean
+export interface IDeviceFormPostDataSuccessAction extends IActionBase {
+  payload: number | undefined
 }
 
-export interface IDeviceFormPostDataSuccessAction {
-  type: string
-  value: number | undefined
+export interface IDeviceFormPutDataSuccessAction extends IActionBase {
+  payload: number | undefined
 }
 
-export interface IDeviceFormPutDataSuccessAction {
-  type: string
-  value: number | undefined
+export interface IDeviceFormIsValiddAction extends IActionBase {
+  payload: boolean
 }
 
-export interface IDeviceFormIsValiddAction {
-  type: string
-  value: boolean
+export interface IDeviceNameIsValiddAction extends IActionBase {
+  payload: boolean
 }
 
-export interface IDeviceNameIsValiddAction {
-  type: string
-  value: boolean
+export interface IDeviceIdAction extends IActionBase {
+  payload: number
 }
 
-export interface IDeviceIdAction {
-  type: string
-  value: number
+export interface IDeviceNameAction extends IActionBase {
+  payload: string
 }
 
-export interface IDeviceNameAction {
-  type: string
-  value: string
-}
-
-export interface IDeviceDescriptionAction {
-  type: string
-  value: string
+export interface IDeviceDescriptionAction extends IActionBase {
+  payload: string
 }
 
 export type IDeviceAction = IDeviceIdAction

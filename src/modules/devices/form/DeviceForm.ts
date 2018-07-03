@@ -29,35 +29,35 @@ const initialStateDeviceForm: IDeviceForm = {
   isValidName: true
 }
 
-export function deviceFormIsValid(value: boolean) {
-  return { type: ActionTypes.DEVICE_FORM_IS_VALID, value }
+export function deviceFormIsValid(isValid: boolean) {
+  return { type: ActionTypes.DEVICE_FORM_IS_VALID, payload: isValid }
 }
 
-export function deviceNameIsValid(value: boolean) {
-  return { type: ActionTypes.DEVICE_NAME_IS_VALID, value }
+export function deviceNameIsValid(isValid: boolean) {
+  return { type: ActionTypes.DEVICE_NAME_IS_VALID, payload: isValid }
 }
 
-export function deviceIdUpdate(value: number | undefined) {
-  return { type: ActionTypes.DEVICE_ID_UPDATE, value }
+export function deviceIdUpdate(id: number | undefined) {
+  return { type: ActionTypes.DEVICE_ID_UPDATE, payload: id }
 }
 
-export function deviceNameUpdate(value: string) {
-  return { type: ActionTypes.DEVICE_NAME_UPDATE, value }
+export function deviceNameUpdate(name: string) {
+  return { type: ActionTypes.DEVICE_NAME_UPDATE, payload: name }
 }
 
-export function deviceDescriptionUpdate(value: string) {
-  return { type: ActionTypes.DEVICE_DESCRIPTION_UPDATE, value }
+export function deviceDescriptionUpdate(description: string) {
+  return { type: ActionTypes.DEVICE_DESCRIPTION_UPDATE, payload: description }
 }
 
-export function deviceFormIsSaved(value: boolean) {
-  return { type: ActionTypes.DEVICE_FORM_IS_SAVED, value }
+export function deviceFormIsSaved(saved: boolean) {
+  return { type: ActionTypes.DEVICE_FORM_IS_SAVED, payload: saved }
 }
 
 export function clearDeviceForm() {
   return (dispatch: Dispatch) => {
     dispatch(deviceFormIsValid(true))
     dispatch(deviceNameIsValid(true))
-    dispatch(deviceFormHasErrored(false))
+    dispatch(deviceFormHasErrored(null, false))
     dispatch(deviceFormIsPending(false))
     dispatch(deviceFormPostDataSuccess(undefined))
     dispatch(deviceNameUpdate(''))
@@ -84,20 +84,20 @@ export function validateDeviceForm() {
   }
 }
 
-export function deviceFormHasErrored(value: boolean) {
-  return { type: ActionTypes.DEVICE_FORM_HAS_ERRORED, value }
+export function deviceFormHasErrored(err: Error, hasError: boolean) {
+  return { type: ActionTypes.DEVICE_FORM_HAS_ERRORED, payload: err, error: hasError }
 }
 
-export function deviceFormIsPending(value: boolean) {
-  return { type: ActionTypes.DEVICE_FORM_IS_PENDING, value }
+export function deviceFormIsPending(isPending: boolean) {
+  return { type: ActionTypes.DEVICE_FORM_IS_PENDING, payload: isPending }
 }
 
-export function deviceFormPostDataSuccess(value: number | undefined) {
-  return { type: ActionTypes.DEVICE_FORM_POST_DATA_SUCCESS, value }
+export function deviceFormPostDataSuccess(idNewDevice: number | undefined) {
+  return { type: ActionTypes.DEVICE_FORM_POST_DATA_SUCCESS, payload: idNewDevice }
 }
 
-export function deviceFormPutDataSuccess(value: number | undefined) {
-  return { type: ActionTypes.DEVICE_FORM_PUT_DATA_SUCCESS, value }
+export function deviceFormPutDataSuccess(idDevice: number | undefined) {
+  return { type: ActionTypes.DEVICE_FORM_PUT_DATA_SUCCESS, payload: idDevice }
 }
 
 export function devicePostData(url: string, data: any) {
@@ -111,7 +111,7 @@ export function devicePostData(url: string, data: any) {
         dispatch(deviceFormPostDataSuccess(id))
       })
       .catch((error) => {
-        dispatch(deviceFormHasErrored(true))
+        dispatch(deviceFormHasErrored(error, true))
       })
   }
 }
@@ -127,7 +127,7 @@ export function devicePutData(url: string, data: any) {
         dispatch(deviceFormPutDataSuccess(id))
       })
       .catch((error) => {
-        dispatch(deviceFormHasErrored(true))
+        dispatch(deviceFormHasErrored(error, true))
       })
   }
 }
@@ -137,19 +137,19 @@ export function deviceFormReduce(state = initialStateDeviceForm, action: IDevice
     case ActionTypes.DEVICE_FORM_HAS_ERRORED:
       return {
         ...state,
-        hasErrored: action.value
+        hasErrored: action.error
       }
     case ActionTypes.DEVICE_FORM_IS_PENDING:
       return {
         ...state,
-        isPending: action.value
+        isPending: action.payload
       }
     case ActionTypes.DEVICE_FORM_POST_DATA_SUCCESS:
       return {
         ...state,
         device: {
           ...state.device,
-          id: action.value
+          id: action.payload
         }
       }
     case ActionTypes.DEVICE_FORM_PUT_DATA_SUCCESS:
@@ -157,30 +157,30 @@ export function deviceFormReduce(state = initialStateDeviceForm, action: IDevice
         ...state,
         device: {
           ...state.device,
-          id: action.value
+          id: action.payload
         }
       }
     case ActionTypes.DEVICE_FORM_IS_VALID:
       return {
         ...state,
-        isValid: action.value
+        isValid: action.payload
       }
     case ActionTypes.DEVICE_NAME_IS_VALID:
       return {
         ...state,
-        isValidName: action.value
+        isValidName: action.payload
       }
     case ActionTypes.DEVICE_FORM_IS_SAVED:
       return {
         ...state,
-        isSaved: action.value
+        isSaved: action.payload
       }
     case ActionTypes.DEVICE_ID_UPDATE:
       return {
         ...state,
         device: {
           ...state.device,
-          id: action.value
+          id: action.payload
         }
       }
     case ActionTypes.DEVICE_NAME_UPDATE:
@@ -188,7 +188,7 @@ export function deviceFormReduce(state = initialStateDeviceForm, action: IDevice
         ...state,
         device: {
           ...state.device,
-          name: action.value
+          name: action.payload
         }
       }
     case ActionTypes.DEVICE_DESCRIPTION_UPDATE:
@@ -196,7 +196,7 @@ export function deviceFormReduce(state = initialStateDeviceForm, action: IDevice
         ...state,
         device: {
           ...state.device,
-          description: action.value
+          description: action.payload
         }
       }
     default:

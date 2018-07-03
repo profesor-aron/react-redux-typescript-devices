@@ -1,7 +1,7 @@
 #React Application "Devices"
 
 ##Install dependencies:
-npm -i
+npm i
 
 ##Run application:
 npm start

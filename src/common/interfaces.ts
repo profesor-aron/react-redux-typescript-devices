@@ -2,6 +2,11 @@ import { SyntheticEvent } from 'react'
 import { ThunkAction } from 'redux-thunk'
 import { AnyAction } from 'redux'
 
+export interface IActionBase {
+  type: string
+  error: boolean
+}
+
 export type IThunkResult<R> = ThunkAction<R, IState, undefined, AnyAction>
 
 export interface IDevice {

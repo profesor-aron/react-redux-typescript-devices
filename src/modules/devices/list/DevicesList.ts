@@ -10,7 +10,8 @@ import {
   IDevices,
   IState,
   IView,
-  IThunkResult
+  IThunkResult,
+  IActionBase
 } from '../../../common/interfaces'
 
 import { viewNameUpdate, changeView } from '../../../modules/main/Main'
@@ -22,44 +23,38 @@ import {
   deviceFormIsSaved
 } from '../form/DeviceForm'
 
-export interface IDevicesItemsAction {
-  type: string
-  value: IDevice[]
+export interface IDevicesItemsAction extends IActionBase {
+  payload: IDevice[]
 }
 
-export interface IDevicesHasErroredAction {
-  type: string
-  value: boolean
+export interface IDevicesHasErroredAction extends IActionBase {
+  payload: Error
 }
 
-export interface IDevicesIsLoadingAction {
-  type: string
-  value: boolean
+export interface IDevicesIsLoadingAction extends IActionBase {
+  payload: boolean
 }
 
-export interface IDevicesIsOpenModalAction {
-  type: string
-  value: boolean
+export interface IDevicesIsOpenModalAction extends IActionBase {
+  payload: boolean
 }
 
-export interface IDevicesItemSelectedAction {
-  type: string
-  value: IDevice | undefined
+export interface IDevicesItemSelectedAction extends IActionBase {
+  payload: IDevice | undefined
 }
 
-export function devicesHasErrored(value: boolean) {
-  return { type: ActionTypes.DEVICES_HAS_ERRORED, value }
+export function devicesHasErrored(err: Error, hasError: boolean) {
+  return { type: ActionTypes.DEVICES_HAS_ERRORED, payload: err, error: hasError }
 }
 
-export function devicesIsLoading(value: boolean) {
-  return { type: ActionTypes.DEVICES_IS_LOADING, value }
+export function devicesIsLoading(isLoading: boolean) {
+  return { type: ActionTypes.DEVICES_IS_LOADING, payload: isLoading }
 }
 
 export function devicesFetchDataSuccess(items: IDevice[]) {
-  return { type: ActionTypes.DEVICES_FETCH_DATA_SUCCESS, value: items }
+  return { type: ActionTypes.DEVICES_FETCH_DATA_SUCCESS, payload: items }
 }
 
-// todo
 export function devicesItemsFetchData(url: string): IThunkResult<void> {
   return (dispatch: Dispatch) => {
     dispatch(devicesIsLoading(true))
@@ -69,9 +64,8 @@ export function devicesItemsFetchData(url: string): IThunkResult<void> {
         dispatch(devicesIsLoading(false))
         dispatch(devicesFetchDataSuccess(items))
       })
-      .catch((error) => {
-        console.log('error', error)
-        dispatch(devicesHasErrored(true))
+      .catch((err) => {
+        dispatch(devicesHasErrored(err, true))
       })
   }
 }
@@ -84,8 +78,8 @@ export function devicesPostData(url: string, data: any) {
         dispatch(devicesIsLoading(false))
         dispatch(devicesFetchDataSuccess(items))
       })
-      .catch((error) => {
-        dispatch(devicesHasErrored(true))
+      .catch((err) => {
+        dispatch(devicesHasErrored(err, true))
       })
   }
 }
@@ -160,27 +154,27 @@ export function devicesReduce(state = initialStateDevices, action: IDevicesActio
     case ActionTypes.DEVICES_HAS_ERRORED:
       return {
         ...state,
-        hasErrored: action.value
+        hasErrored: action.error
       }
     case ActionTypes.DEVICES_IS_LOADING:
       return {
         ...state,
-        isLoading: action.value
+        isLoading: action.payload
       }
     case ActionTypes.DEVICES_FETCH_DATA_SUCCESS:
       return {
         ...state,
-        items: action.value
+        items: action.payload
       }
     case ActionTypes.DEVICES_SHOW_HIDE_CONFIRM_MODAL:
       return {
         ...state,
-        isOpenModal: action.value
+        isOpenModal: action.payload
       }
     case ActionTypes.DEVICES_ITEM_SELECTED:
       return {
         ...state,
-        itemSelected: action.value
+        itemSelected: action.payload
       }
     default:
       return state

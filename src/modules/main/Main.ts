@@ -22,33 +22,33 @@ export function viewNameUpdate(name: string) {
 }
 
 export function showHome() {
-  return (dispatch: Dispatch, getState: () => IState) => {
+  return (dispatch: Dispatch) => {
     dispatch(viewNameUpdate('home'))
   }
 }
 
 export function showDevices() {
-  return (dispatch: ThunkDispatch<IState, void, AnyAction>, getState: () => IState) => {
+  return (dispatch: ThunkDispatch<IState, void, AnyAction>) => {
     dispatch(devicesItemsFetchData('/devices'))
     dispatch(viewNameUpdate('devicesList'))
   }
 }
 
 export function showAddDeviceForm() {
-  return (dispatch: ThunkDispatch<IState, void, AnyAction>, getState: () => IState) => {
+  return (dispatch: ThunkDispatch<IState, void, AnyAction>) => {
     dispatch(clearDeviceForm())
     dispatch(viewNameUpdate('devicesForm'))
   }
 }
 
 export function showEditDeviceForm() {
-  return (dispatch: ThunkDispatch<IState, void, AnyAction>, getState: () => IState) => {
+  return (dispatch: ThunkDispatch<IState, void, AnyAction>) => {
     dispatch(viewNameUpdate('devicesForm'))
   }
 }
 
 export function showNoFound() {
-  return (dispatch: Dispatch, getState: () => IState) => {
+  return (dispatch: Dispatch) => {
     dispatch(viewNameUpdate('noFound'))
   }
 }

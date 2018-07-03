@@ -57,9 +57,8 @@ export interface IDevicesContainer {
 
 /***************************************************/
 /* View */
-export interface IViewAction {
-  type: string
-  value: string
+export interface IViewAction extends IActionBase {
+  payload: string
 }
 
 /***************************************************/

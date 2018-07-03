@@ -17,8 +17,8 @@ import { Router } from '../../router'
 import { devicesItemsFetchData } from '../devices/list/DevicesList'
 import { clearDeviceForm } from '../devices/form/DeviceForm'
 
-export function viewNameUpdate(value: string) {
-  return { type: ActionTypes.VIEW_UPDATE, value }
+export function viewNameUpdate(name: string) {
+  return { type: ActionTypes.VIEW_UPDATE, payload: name }
 }
 
 export function showHome() {
@@ -62,7 +62,7 @@ export function viewReduce(state = initialStateView, action: IViewAction) {
     case ActionTypes.VIEW_UPDATE:
       return {
         ...state,
-        name: action.value
+        name: action.payload
       }
     default:
       return state

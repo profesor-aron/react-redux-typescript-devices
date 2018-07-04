@@ -4,6 +4,7 @@ import {
   Image,
   Menu,
 } from 'semantic-ui-react'
+import { Translate } from 'react-redux-i18n'
 
 import 'semantic-ui-css/semantic.min.css'
 
@@ -22,7 +23,7 @@ export const MenuView = ({ changeLocale, changeView }: IMenuContainer) => (
         active={true}
       >
         <Icon name='home' />
-        Home
+        <Translate value='menu.home'/>
       </Menu.Item>
       <Menu.Item
         name='devices'
@@ -30,7 +31,7 @@ export const MenuView = ({ changeLocale, changeView }: IMenuContainer) => (
         active={false}
       >
         <Icon name='server' />
-        Devices
+        <Translate value='menu.devices'/>
       </Menu.Item>
       <Menu.Menu position='right'>
         <Menu.Item onClick={() => changeLocale('en')}>

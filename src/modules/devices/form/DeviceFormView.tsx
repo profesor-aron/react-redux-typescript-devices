@@ -8,6 +8,7 @@ import {
   Message,
   TextArea
 } from 'semantic-ui-react'
+import { I18n, Translate } from 'react-redux-i18n'
 
 import { IDeviceContainer } from '../../../common/interfaces'
 import { Link } from '../../../common/components/link'
@@ -23,9 +24,9 @@ export const DeviceForm = ({
     isNew: boolean
   }
   const Title = ({isNew}: ITitleForm) => {
-    let title = <h2>Edit the device</h2>
+    let title = <h2><Translate value='devices.form.title.edit'/></h2>
     if (isNew) {
-      title = <h2>Add a device</h2>
+      title = <h2><Translate value='devices.form.title.add'/></h2>
     }
     return title
   }
@@ -33,8 +34,8 @@ export const DeviceForm = ({
     if (isSaved) {
       return (
         <Message success
-          header='Device'
-          content='The device data has been successfully saved'
+          header={<Translate value='devices.form.success.header'/>}
+          content={<p><Translate value='devices.form.success.content'/></p>}
         />
       )
     }
@@ -46,7 +47,7 @@ export const DeviceForm = ({
       <Container>
         <Link onClick={() => showDevices()}>
           <div>
-            <Icon name='long arrow alternate left' /> back to devices list
+            <Icon name='long arrow alternate left' /> <Translate value='devices.form.back'/>
           </div>
         </Link>
         <SuccessMessage/>
@@ -57,8 +58,8 @@ export const DeviceForm = ({
           <Form.Field
             id='device-name'
             control={Input}
-            label='Name'
-            placeholder='Enter the name'
+            label={<Translate value='devices.form.fields.name.label'/>}
+            placeholder={I18n.t('devices.form.fields.name.placeholder')}
             value={deviceForm.device.name}
             onChange={(e: SyntheticEvent<HTMLInputElement>) => updateName(e)}
             error={!deviceForm.isValidName}
@@ -66,12 +67,14 @@ export const DeviceForm = ({
           <Form.Field
             id='device-description'
             control={TextArea}
-            label='Description'
-            placeholder='Enter the description'
+            label={<Translate value='devices.form.fields.description.label'/>}
+            placeholder={I18n.t('devices.form.fields.description.placeholder')}
             value={deviceForm.device.description}
             onChange={(e: SyntheticEvent<HTMLInputElement>) => updateDescription(e)}
           />
-          <Button primary onClick={() => apply()}>Apply</Button>
+          <Button primary onClick={() => apply()}>
+            <Translate value='devices.form.apply'/>
+          </Button>
         </Form>
       </Container>
     </div>

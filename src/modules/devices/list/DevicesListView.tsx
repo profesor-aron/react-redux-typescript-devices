@@ -6,6 +6,7 @@ import {
   Icon,
   Modal
 } from 'semantic-ui-react'
+import { Translate } from 'react-redux-i18n'
 
 import {
   IDevice,
@@ -28,13 +29,13 @@ const ConfirmModal = ({isOpenModal, deviceName, close, confirm}: IConfirmModal) 
       closeOnRootNodeClick={false}
       onClose={close}
     >
-      <Modal.Header>Delete device</Modal.Header>
+      <Modal.Header><Translate value='devices.list.modal.header'/></Modal.Header>
       <Modal.Content>
-        <p>Are you sure you want to delete the device <b>{deviceName}</b></p>
+        <p><Translate value='devices.list.modal.content'/> <b>{deviceName}</b></p>
       </Modal.Content>
       <Modal.Actions>
-        <Button negative onClick={() => close()}>No</Button>
-        <Button positive onClick={() => confirm()}>Yes</Button>
+        <Button negative onClick={() => close()}><Translate value='devices.list.modal.no'/></Button>
+        <Button positive onClick={() => confirm()}><Translate value='devices.list.modal.yes'/></Button>
       </Modal.Actions>
     </Modal>
   )
@@ -54,10 +55,10 @@ const DisplayDevices = ({devices, editDevice, deleteDevice, addDevice}: IDisplay
         <h4>#</h4>
       </Grid.Column>
       <Grid.Column width={6}>
-        <h4>Name</h4>
+        <h4><Translate value='devices.list.table.name'/></h4>
       </Grid.Column>
       <Grid.Column width={7}>
-        <h4>Description</h4>
+        <h4><Translate value='devices.list.table.description'/></h4>
       </Grid.Column>
     </Grid.Row>
   )
@@ -70,9 +71,9 @@ const DisplayDevices = ({devices, editDevice, deleteDevice, addDevice}: IDisplay
         <Grid.Column width={16} textAlign='center'>
           <Link onClick={() => addDevice()}>
             <div>
-              There are no devices.
+              <Translate value='devices.list.empty.message'/>
               <br/>
-              Click here to add a new device.
+              <Translate value='devices.list.empty.action'/>
             </div>
           </Link>
         </Grid.Column>
@@ -128,16 +129,16 @@ export const Devices = ({
       confirm={confirm}
     />
     <Container>
-      <h2>Devices</h2>
+      <h2><Translate value='devices.list.title'/></h2>
      </Container>
     <Container textAlign='right'>
       <Button color='teal' onClick={addDevice}>
-        <Icon name='plus'/>Add a device
+        <Icon name='plus'/><Translate value='devices.list.addDevice'/>
       </Button>
     </Container>
     <Container>
       <h4>
-        {devices.length} items
+        {devices.length} <Translate value='devices.list.items'/>
       </h4>
       <DisplayDevices
         addDevice={addDevice}

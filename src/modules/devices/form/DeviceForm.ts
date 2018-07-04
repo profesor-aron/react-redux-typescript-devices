@@ -13,7 +13,7 @@ import {
 
 import { SyntheticEvent } from 'react'
 import { DeviceService } from '../../../common/services/DeviceService'
-import { changeView } from '../../main/Main';
+import { changeView } from '../../main/Main'
 
 const initialStateDevice: IDevice = {
   description: '',

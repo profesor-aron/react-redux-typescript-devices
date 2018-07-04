@@ -122,6 +122,8 @@ export function editDevice(device: IDevice): IThunkResult<void> {
   }
 }
 
+// todo loading by isPending
+// todo remove IThunkResult ?
 export function devicesDeleteData(): IThunkResult<void> {
   return (dispatch: ThunkDispatch<IState, void, AnyAction>, getState: () => IState) => {
     dispatch(showHideConfirmModal(false))

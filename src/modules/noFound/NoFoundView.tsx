@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Container } from 'semantic-ui-react'
 import { INoFoundContainer } from '../../common/interfaces'
-import { Link } from '../../common/components/link';
+import { Link } from '../../common/components/link'
 
 export const NoFound = ({changeView}: INoFoundContainer) => (
   <div>

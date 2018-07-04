@@ -11,7 +11,7 @@ import {
   IDevice,
   IDevicesContainer
 } from '../../../common/interfaces'
-import { Link } from '../../../common/components/link';
+import { Link } from '../../../common/components/link'
 
 export interface IConfirmModal {
   isOpenModal: boolean

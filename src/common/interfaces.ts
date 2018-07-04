@@ -64,6 +64,7 @@ export interface IViewAction extends IActionBase {
 /***************************************************/
 /* Menu */
 export interface IMenuContainer {
+  changeLocale: (locale: string) => void
   changeView: (route: string) => void
 }
 

@@ -1,9 +1,14 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin")
+const CopyWebPackPlugin = require("copy-webpack-plugin")
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/index.html",
   filename: "./index.html"
 })
+
+const copyPlugin = new CopyWebPackPlugin([
+  { from: 'src/assets', to: 'assets' }
+])
 
 module.exports = {
   devtool: "source-map",
@@ -35,5 +40,8 @@ module.exports = {
       }
     ]
   },
-  plugins: [htmlPlugin]
+  plugins: [
+    htmlPlugin,
+    copyPlugin
+  ]
 }

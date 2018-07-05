@@ -1,17 +1,19 @@
+import { SyntheticEvent } from 'react'
 import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
+import {
+  AnyAction,
+  Dispatch
+} from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import { ActionTypes } from '../../../common/actionTypes'
 import { DeviceForm } from './DeviceFormView'
-
 import {
   IDevice,
   IDeviceAction,
   IDeviceForm,
   IState
 } from '../../../common/interfaces'
-
-import { SyntheticEvent } from 'react'
 import { DeviceService } from '../../../common/services/DeviceService'
 import { changeView } from '../../main/Main'
 
@@ -66,7 +68,7 @@ export function clearDeviceForm() {
 }
 
 export function validateDeviceForm() {
-  return (dispatch: Dispatch, getState: () => IState) => {
+  return (dispatch: ThunkDispatch<IState, void, AnyAction>, getState: () => IState) => {
     const state = getState()
     const { device } = state.deviceForm
     if (device.name.trim().length === 0) {
@@ -74,11 +76,9 @@ export function validateDeviceForm() {
     } else {
       dispatch(deviceNameIsValid(true))
       if (device.id === undefined) {
-        // POST DEVICE
-        devicePostData('/devices', device)(dispatch)
+        dispatch(devicePostData('/devices', device))
       } else {
-        // PUT DEVICE
-        devicePutData('/devices', device)(dispatch)
+        dispatch(devicePutData('/devices', device))
       }
     }
   }
@@ -101,7 +101,7 @@ export function deviceFormPutDataSuccess(idDevice: number | undefined) {
 }
 
 export function devicePostData(url: string, data: IDevice) {
-  return (dispatch: Dispatch) => {
+  return (dispatch: ThunkDispatch<IState, void, AnyAction>) => {
     dispatch(deviceFormIsSaved(false))
     dispatch(deviceFormIsPending(true))
     DeviceService.post(url, data)

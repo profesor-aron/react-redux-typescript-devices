@@ -1,21 +1,21 @@
-import { connect, Store } from 'react-redux'
-import { Dispatch, Action, AnyAction, ActionCreator } from 'redux'
+import {
+  Dispatch,
+  AnyAction
+} from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { connect } from 'react-redux'
 
 import { ActionTypes } from '../../../common/actionTypes'
 import { Devices } from './DevicesListView'
 import { DeviceService } from '../../../common/services/DeviceService'
-
 import {
   IDevice,
   IDevices,
   IState,
-  IView,
   IThunkResult,
-  IActionBase
+  IDevicesAction
 } from '../../../common/interfaces'
-
-import { viewNameUpdate, changeView } from '../../../modules/main/Main'
-import { ThunkAction, ThunkDispatch } from 'redux-thunk'
+import { changeView } from '../../../modules/main/Main'
 import {
   deviceIdUpdate,
   deviceNameUpdate,
@@ -23,32 +23,12 @@ import {
   deviceFormIsSaved
 } from '../form/DeviceForm'
 
-export interface IDevicesItemsAction extends IActionBase {
-  payload: IDevice[]
-}
-
-export interface IDevicesHasErroredAction extends IActionBase {
-  payload: Error
-}
-
-export interface IDevicesIsLoadingAction extends IActionBase {
-  payload: boolean
-}
-
-export interface IDevicesIsOpenModalAction extends IActionBase {
-  payload: boolean
-}
-
-export interface IDevicesItemSelectedAction extends IActionBase {
-  payload: IDevice | undefined
-}
-
 export function devicesHasErrored(err: Error, hasError: boolean) {
   return { type: ActionTypes.DEVICES_HAS_ERRORED, payload: err, error: hasError }
 }
 
-export function devicesIsLoading(isLoading: boolean) {
-  return { type: ActionTypes.DEVICES_IS_LOADING, payload: isLoading }
+export function devicesIsPending(isPending: boolean) {
+  return { type: ActionTypes.DEVICES_IS_PENDING, payload: isPending }
 }
 
 export function devicesFetchDataSuccess(items: IDevice[]) {
@@ -57,11 +37,10 @@ export function devicesFetchDataSuccess(items: IDevice[]) {
 
 export function devicesItemsFetchData(url: string): IThunkResult<void> {
   return (dispatch: Dispatch) => {
-    dispatch(devicesIsLoading(true))
+    dispatch(devicesIsPending(true))
     DeviceService.get(url)
       .then((items) => {
-        console.log('devicesItemsFetchData', items)
-        dispatch(devicesIsLoading(false))
+        dispatch(devicesIsPending(false))
         dispatch(devicesFetchDataSuccess(items))
       })
       .catch((err) => {
@@ -72,13 +51,14 @@ export function devicesItemsFetchData(url: string): IThunkResult<void> {
 
 export function devicesPostData(url: string, data: IDevice) {
   return (dispatch: Dispatch) => {
-    dispatch(devicesIsLoading(true))
+    dispatch(devicesIsPending(true))
     DeviceService.post(url, data)
       .then((items) => {
-        dispatch(devicesIsLoading(false))
+        dispatch(devicesIsPending(false))
         dispatch(devicesFetchDataSuccess(items))
       })
       .catch((err) => {
+        dispatch(devicesIsPending(false))
         dispatch(devicesHasErrored(err, true))
       })
   }
@@ -93,20 +73,20 @@ export function selectDevice(device: IDevice) {
 }
 
 export function deleteDevice(device: IDevice) {
-  return (dispatch: Dispatch, getState: () => IState) => {
+  return (dispatch: Dispatch) => {
     dispatch(selectDevice(device))
     dispatch(showHideConfirmModal(true))
   }
 }
 
-export function addDevice(): IThunkResult<void> {
+export function addDevice() {
   return (dispatch: ThunkDispatch<IState, void, AnyAction>) => {
     dispatch(deviceFormIsSaved(false))
     dispatch(changeView('/devices/add'))
   }
 }
 
-export function editDevice(device: IDevice): IThunkResult<void> {
+export function editDevice(device: IDevice) {
   return (dispatch: ThunkDispatch<IState, void, AnyAction>) => {
     DeviceService.get(`/devices/${device.id}`)
       .then((deviceFound) => {
@@ -122,35 +102,27 @@ export function editDevice(device: IDevice): IThunkResult<void> {
   }
 }
 
-// todo loading by isPending
-// todo remove IThunkResult ?
-export function devicesDeleteData(): IThunkResult<void> {
+export function devicesDeleteData() {
   return (dispatch: ThunkDispatch<IState, void, AnyAction>, getState: () => IState) => {
-    dispatch(showHideConfirmModal(false))
     const id = getState().devices.itemSelected.id
-    console.log('id', id)
-    //dispatch(devicesIsLoading(true))
+    dispatch(showHideConfirmModal(false))
+    dispatch(devicesIsPending(true))
     DeviceService.delete('/devices', {data: id})
       .then((isDeleted) => {
-        console.log('isDeleted', isDeleted)
+        dispatch(devicesIsPending(false))
         dispatch(devicesItemsFetchData('/devices'))
         dispatch(selectDevice(undefined))
       })
       .catch((error) => {
+        dispatch(devicesIsPending(false))
         dispatch(devicesHasErrored(error, true))
       })
   }
 }
 
-export type IDevicesAction = IDevicesHasErroredAction
-  | IDevicesIsLoadingAction
-  | IDevicesItemsAction
-  | IDevicesIsOpenModalAction
-  | IDevicesItemSelectedAction
-
 const initialStateDevices: IDevices = {
   hasErrored: false,
-  isLoading: false,
+  isPending: false,
   isOpenModal: false,
   itemSelected: undefined,
   items: []
@@ -163,10 +135,10 @@ export function devicesReduce(state = initialStateDevices, action: IDevicesActio
         ...state,
         hasErrored: action.error
       }
-    case ActionTypes.DEVICES_IS_LOADING:
+    case ActionTypes.DEVICES_IS_PENDING:
       return {
         ...state,
-        isLoading: action.payload
+        isPending: action.payload
       }
     case ActionTypes.DEVICES_FETCH_DATA_SUCCESS:
       return {

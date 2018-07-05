@@ -26,7 +26,7 @@ export interface IDeviceForm {
 
 export interface IDevices {
   hasErrored: boolean
-  isLoading: boolean
+  isPending: boolean
   isOpenModal: boolean
   items: IDevice[]
   itemSelected: IDevice | undefined
@@ -44,6 +44,32 @@ export interface IState {
 
 /***************************************************/
 /* Devices */
+export interface IDevicesItemsAction extends IActionBase {
+  payload: IDevice[]
+}
+
+export interface IDevicesHasErroredAction extends IActionBase {
+  payload: Error
+}
+
+export interface IDevicesIsPendingAction extends IActionBase {
+  payload: boolean
+}
+
+export interface IDevicesIsOpenModalAction extends IActionBase {
+  payload: boolean
+}
+
+export interface IDevicesItemSelectedAction extends IActionBase {
+  payload: IDevice | undefined
+}
+
+export type IDevicesAction = IDevicesHasErroredAction
+  | IDevicesIsPendingAction
+  | IDevicesItemsAction
+  | IDevicesIsOpenModalAction
+  | IDevicesItemSelectedAction
+
 export interface IDevicesContainer {
   devices: IDevice[]
   isOpenModal: boolean

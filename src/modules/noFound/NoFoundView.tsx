@@ -11,7 +11,7 @@ export const NoFound = ({changeView}: INoFoundContainer) => (
     <Container>
       <h2><Translate value='noFound.message'/></h2>
       <div>
-        <Link onClick={() => changeView('/home')}>
+        <Link id='goHome' onClick={() => changeView('/home')}>
           <Translate value='noFound.action'/>
         </Link>
       </div>

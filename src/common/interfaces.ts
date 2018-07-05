@@ -110,8 +110,9 @@ export interface IHomeContainer {
 /***************************************************/
 /* Link */
 export interface ILink {
-  onClick: () => void
+  id?: string
   children: string | JSX.Element
+  onClick: () => void
 }
 
 /***************************************************/

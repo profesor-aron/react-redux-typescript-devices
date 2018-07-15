@@ -1,18 +1,22 @@
 import React from 'react'
 import { createMockStore } from 'redux-test-utils'
-
+import { ShallowWrapper } from 'enzyme'
 import { shallowWithStore } from '../../config/test/setupEnzyme'
+
 import { NoFoundContainer } from './NoFound'
 
 describe('NoFound', () => {
 
-  it('should handle state and actions', () => {
+  let wrapper: ShallowWrapper
 
+  it('simulates click events', () => {
+    const changeView = jest.fn()
     const testState = {}
-
     const store = createMockStore(testState)
-    const component = shallowWithStore(<NoFoundContainer />, store)
-
-    expect(component.dive().find('#goHome').prop('onClick')).toBeInstanceOf(Function)
+    wrapper = shallowWithStore(<NoFoundContainer />, store)
+    wrapper.dive().find('#goHome').simulate(
+      'click',
+      {changeView}
+    )
   })
 })
